@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="domain">
+  <class name="Contact" table="Contacts" discriminator-value="C">
+  
+  	 <id name="idContact" type="long" column="idContact" >
+   		<generator class="increment"/>
+  	 </id>
+  	 
+  	 <discriminator column="sousclasse" type="character"/>
+  	 
+  	 <property name="firstName" type="string" column="firstName"></property>
+  	 <property name="lastName" type="string" column="lastName"></property>
+  	 <property name="email" type="string" column="email"></property>
+  	 
+  	 
+	 <set name="phones" inverse="true" cascade="persist">
+	  	 <key column="idContact"/>
+	  	 <one-to-many class="PhoneNumber"/>
+	  </set>
+	  	 
+	  	   
+	  <many-to-one name="adress" column="idAdress" unique="true" not-null="true" cascade="persist">
+	  </many-to-one> 
+	  	 
+	  <set name="groupes" table="ContactAndGroup" cascade='persist'>
+	  	 	<key column="idContact"/>
+	  	 	<many-to-many class="ContactGroup" column="idContactGroup"/>
+	  </set>
+	  
+	 <subclass name="Entreprise" discriminator-value="E">
+  	 	<property name="numSiret" column="numSiret" type="long"/>
+  	 </subclass>
+  	 
+  </class>
+</hibernate-mapping>
